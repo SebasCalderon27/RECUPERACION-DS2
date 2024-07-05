@@ -3,21 +3,20 @@
 
 #include <stdio.h>
 
-#define MAX_PRODUCTOS 100  // Límite máximo de productos
+#define MAX_PRODUCTOS 10
 
 typedef struct {
     char nombre[40];
     char categoria[40];
     char marca[40];
-    double precio;
 } Producto;
 
-void listarProductos(FILE *archivo, Producto *productos, int numProductos);
-void buscarXMarca(FILE *archivo, Producto *productos, int numProductos);
-void buscarXCategoria(FILE *archivo, Producto *productos, int numProductos);
-void buscarXPrecioMenor(FILE *archivo, Producto *productos, int numProductos);
-void editarProducto(FILE *archivo, Producto *productos, int numProductos);
-void agregarProducto(FILE *archivo, Producto *productos, int *numProductos);
-void eliminarProducto(FILE *archivo, Producto *productos, int *numProductos);
+void listarProductos(FILE *archivo, Producto productos[], double precio[], int indice[]);
+void buscarXMarca(FILE *archivo, Producto productos[], double precio[]);
+void buscarXCategoria(FILE *archivo, Producto productos[], double precio[]);
+void buscarXPrecioMenor(FILE *archivo, Producto productos[], double precio[]);
+void editarProducto(FILE *archivo, Producto productos[], double precio[], int indice[]);
+void agregarProducto(FILE *archivo, Producto productos[], double precio[], int *numProductos, int *nextIndex);
+void eliminarProducto(FILE *archivo, Producto productos[], double precio[], int *numProductos);
 
-#endif /* FUNCIONES_H */
+#endif 
