@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "funciones.h"
 
-int main(int argc, char *argv[]) {
+int main() {
     FILE *archivo;
     archivo = fopen("resultados.txt", "w");
     if (archivo == NULL) {
@@ -9,41 +10,40 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    char productos[10][3][40] = {
-        {"Jordan", "Zapatos", "Nike"},
-        {"Classic", "Camisas", "Nike"},
-        {"Terrex", "Zapatos", "Adidas"},
-        {"Classic", "Zapatos", "Puma"},
-        {"Venture", "Camisas", "Nike"},
-        {"Superst", "Zapatos", "Adidas"},
-        {"Terrex", "Chompas", "Adidas"},
-        {"Classic", "Chompas", "Puma"},
-        {"Venture", "Chompas", "Adidas"},
-        {"Hoddie", "Chompas", "Puma"}
-    };
-    double precio[10] = {120, 40, 122, 89, 150, 110, 150, 120, 40, 45};
-    int indice[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    Producto productos[MAX_PRODUCTOS];  // Arreglo de productos
+    int numProductos = 0;               // Número actual de productos
+
     int opcion1, opcion2, opcion3;
 
     do {
-        printf("Elija una opción:\n1. Listar Productos\n2. Buscar Productos\n3. Editar Productos\n>> ");
+        printf("\nElija una opción:\n");
+        printf("1. Listar Productos\n");
+        printf("2. Buscar Productos\n");
+        printf("3. Editar Productos\n");
+        printf("4. Agregar Producto\n");
+        printf("5. Eliminar Producto\n");
+        printf("0. Salir\n>> ");
         scanf("%d", &opcion1);
+
         switch (opcion1) {
             case 1:
-                listarProductos(archivo, productos, precio, indice);
+                listarProductos(archivo, productos, numProductos);
                 break;
             case 2:
-                printf("Buscar por:\n1. Marca\n2. Categoria\n3. Precio Menor de\n>> ");
+                printf("\nBuscar por:\n");
+                printf("1. Marca\n");
+                printf("2. Categoría\n");
+                printf("3. Precio Menor de\n>> ");
                 scanf("%d", &opcion2);
                 switch (opcion2) {
                     case 1:
-                        buscarXMarca(archivo, productos, precio);
+                        buscarXMarca(archivo, productos, numProductos);
                         break;
                     case 2:
-                        buscarXCategoria(archivo, productos, precio);
+                        buscarXCategoria(archivo, productos, numProductos);
                         break;
                     case 3:
-                        buscarXPrecioMenor(archivo, productos, precio);
+                        buscarXPrecioMenor(archivo, productos, numProductos);
                         break;
                     default:
                         fprintf(archivo, "Opción no válida.\n");
@@ -51,28 +51,32 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             case 3:
-                editarProducto(archivo, productos, precio, indice);
+                editarProducto(archivo, productos, numProductos);
+                break;
+            case 4:
+                if (numProductos < MAX_PRODUCTOS) {
+                    agregarProducto(archivo, productos, &numProductos);
+                } else {
+                    fprintf(archivo, "No se puede agregar más productos. Límite alcanzado.\n");
+                }
+                break;
+            case 5:
+                eliminarProducto(archivo, productos, &numProductos);
+                break;
+            case 0:
+                printf("Saliendo del programa.\n");
                 break;
             default:
                 fprintf(archivo, "Opción no válida.\n");
                 break;
         }
-        printf("Desea elegir otra opción:\n1. Si\n2. No\n>> ");
+
+        printf("\nDesea elegir otra opción:\n");
+        printf("1. Sí\n");
+        printf("2. No\n>> ");
         scanf("%d", &opcion3);
+
     } while (opcion3 == 1);
-
-    fclose(archivo);
-
-    archivo = fopen("resultados.txt", "r");
-    if (archivo == NULL) {
-        printf("Error al abrir el archivo.\n");
-        return 1;
-    }
-
-    char linea[256];
-    while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
-    }
 
     fclose(archivo);
     printf("Los resultados se han guardado en 'resultados.txt'\n");
